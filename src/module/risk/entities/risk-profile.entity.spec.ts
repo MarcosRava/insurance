@@ -31,4 +31,9 @@ describe('RiskProfile', () => {
       expect(profile).toEqual(RiskProfile.Responsible);
     },
   );
+
+  it('should return ineligible profile with score $score', () => {
+    const profile = RiskProfile.getProfile(null);
+    expect(profile).toEqual(RiskProfile.Ineligible);
+  });
 });
