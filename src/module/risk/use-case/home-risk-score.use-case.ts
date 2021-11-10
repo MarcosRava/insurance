@@ -10,27 +10,27 @@ import {
   sumOrFirstIneligible,
   applyRiskPoint,
   ineligible,
-} from '../step/index.step';
+} from '../rule/index.rule';
 
-const houseIsMortgateStep = applyRiskPoint(houseIsMortgate, 1);
-const noIncomeStep = applyRiskPoint(noIncome, ineligible);
-const noVehicleStep = applyRiskPoint(noVehicle, ineligible);
-const noHouseStep = applyRiskPoint(noHouse, ineligible);
-const ageBetween30And40Step = applyRiskPoint(ageBetween30And40, -1);
-const incomeAbove200kStep = applyRiskPoint(incomeAbove200k, -1);
-const isUnder30Step = applyRiskPoint(isUnder30, -2);
+const houseIsMortgateRule = applyRiskPoint(houseIsMortgate, 1);
+const noIncomeRule = applyRiskPoint(noIncome, ineligible);
+const noVehicleRule = applyRiskPoint(noVehicle, ineligible);
+const noHouseRule = applyRiskPoint(noHouse, ineligible);
+const ageBetween30And40Rule = applyRiskPoint(ageBetween30And40, -1);
+const incomeAbove200kRule = applyRiskPoint(incomeAbove200k, -1);
+const isUnder30Rule = applyRiskPoint(isUnder30, -2);
 
 export class HomeRiskScoreUseCase {
   async execute(userAttributes: UserAttributes): Promise<number> {
     return sumOrFirstIneligible(
       [
-        houseIsMortgateStep,
-        noIncomeStep,
-        noVehicleStep,
-        noHouseStep,
-        ageBetween30And40Step,
-        incomeAbove200kStep,
-        isUnder30Step,
+        houseIsMortgateRule,
+        noIncomeRule,
+        noVehicleRule,
+        noHouseRule,
+        ageBetween30And40Rule,
+        incomeAbove200kRule,
+        isUnder30Rule,
       ],
       userAttributes,
     );

@@ -3,36 +3,36 @@ import { UserAttributes } from 'src/module/insurance/entities/user-attributes.en
 
 export type Score = number | null;
 type getScore = (userAttributes: UserAttributes) => Score;
-type StepFn = (riskPoint: Score) => getScore;
+type RuleFn = (riskPoint: Score) => getScore;
 
 export const ineligible: Score = null;
 
-export const houseIsMortgate: StepFn = (riskPoint) => (userAttributes) => {
+export const houseIsMortgate: RuleFn = (riskPoint) => (userAttributes) => {
   const isMortgate =
     userAttributes?.house?.ownershipStatus === OwnershipStatus.Mortgaged;
   return isMortgate ? riskPoint : 0;
 };
-export const noIncome: StepFn =
+export const noIncome: RuleFn =
   (riskPoint) =>
   ({ income }) =>
     income ? 0 : riskPoint;
-export const noVehicle: StepFn =
+export const noVehicle: RuleFn =
   (riskPoint) =>
   ({ vehicle }) =>
     vehicle ? 0 : riskPoint;
-export const noHouse: StepFn =
+export const noHouse: RuleFn =
   (riskPoint) =>
   ({ house }) =>
     house ? 0 : riskPoint;
-export const ageBetween30And40: StepFn =
+export const ageBetween30And40: RuleFn =
   (riskPoint) =>
   ({ age }) =>
     age >= 30 && age <= 40 ? riskPoint : 0;
-export const incomeAbove200k: StepFn =
+export const incomeAbove200k: RuleFn =
   (riskPoint) =>
   ({ income }) =>
     income > 200000 ? riskPoint : 0;
-export const isUnder30: StepFn =
+export const isUnder30: RuleFn =
   (riskPoint) =>
   ({ age }) =>
     age < 30 ? riskPoint : 0;
@@ -44,12 +44,12 @@ export const sumOrFirstIneligible = (
 ) => {
   let score: Score = 0;
   for (const fn of arr) {
-    const stepScore = fn(userAttributes);
-    if (stepScore === null) {
+    const ruleScore = fn(userAttributes);
+    if (ruleScore === null) {
       score = null;
       break;
     }
-    score += stepScore;
+    score += ruleScore;
   }
   return score;
 };
