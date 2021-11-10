@@ -1,1 +1,3 @@
-export class VehicleDto {}
+export class VehicleDto {
+  year: number;
+}
