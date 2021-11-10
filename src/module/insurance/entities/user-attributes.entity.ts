@@ -8,7 +8,8 @@ export class MaritalStatus {
   constructor(private value: string) {}
 }
 
-export type RiskAnswer = number;
+export type RiskAnswer = 0 | 1;
+export type RiskAnswers = [RiskAnswer, RiskAnswer, RiskAnswer];
 
 export class UserAttributes {
   age: number;
@@ -16,6 +17,6 @@ export class UserAttributes {
   house: House;
   income: number;
   maritalStatus: MaritalStatus;
-  riskQuestions: Array<RiskAnswer>;
+  riskQuestions: RiskAnswers;
   vehicle: Vehicle;
 }
