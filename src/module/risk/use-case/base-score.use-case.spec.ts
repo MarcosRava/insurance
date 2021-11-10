@@ -6,7 +6,7 @@ import {
 import { BaseScoreUseCase } from './base-score.use-case';
 
 describe('BaseScoreUseCase', () => {
-  let service: BaseScoreUseCase;
+  let usecase: BaseScoreUseCase;
   let userAttributes: UserAttributes;
 
   beforeEach(async () => {
@@ -14,12 +14,12 @@ describe('BaseScoreUseCase', () => {
       providers: [BaseScoreUseCase],
     }).compile();
 
-    service = module.get<BaseScoreUseCase>(BaseScoreUseCase);
+    usecase = module.get<BaseScoreUseCase>(BaseScoreUseCase);
     userAttributes = new UserAttributes();
   });
 
   it('should be defined', () => {
-    expect(service).toBeDefined();
+    expect(usecase).toBeDefined();
   });
 
   test.each([
@@ -31,7 +31,7 @@ describe('BaseScoreUseCase', () => {
     'should calculate base score from $answer',
     async ({ answer, expected }) => {
       userAttributes.riskQuestions = answer as RiskAnswers;
-      const baseScore = await service.execute(userAttributes);
+      const baseScore = await usecase.execute(userAttributes);
       expect(baseScore).toBe(expected);
     },
   );
