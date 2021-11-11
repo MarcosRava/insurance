@@ -34,7 +34,7 @@ export class PersonalInformationDto {
 
   @ValidateNested()
   @IsOptional()
-  house: HouseDto;
+  house?: HouseDto;
 
   @IsInt()
   @Min(0)
@@ -55,5 +55,5 @@ export class PersonalInformationDto {
 
   @ValidateNested()
   @IsOptional()
-  vehicle: VehicleDto;
+  vehicle?: VehicleDto;
 }
