@@ -1,4 +1,4 @@
-import { InsurancePlan } from './insurance-plan.entity';
+import { InsurancePlan } from './insurance-plan.enum';
 
 describe('InsurancePlan', () => {
   it('should be defined', () => {
