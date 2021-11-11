@@ -14,7 +14,7 @@ import {
   noIncome,
   noVehicle,
   Score,
-} from './index.step';
+} from './index.rule';
 
 describe('RiskSteps', () => {
   let userAttributes: UserAttributes;

@@ -1,50 +1,23 @@
 import { OwnershipStatus } from 'src/module/insurance/entities/house.entity';
-import { UserAttributes } from 'src/module/insurance/entities/user-attributes.entity';
+import {
+  MaritalStatus,
+  UserAttributes,
+} from 'src/module/insurance/entities/user-attributes.entity';
 
 export type Score = number | null;
-type getScore = (userAttributes: UserAttributes) => Score;
-type RuleFn = (riskPoint: Score) => getScore;
-
 export const ineligible: Score = null;
 
-export const houseIsMortgate: RuleFn = (riskPoint) => (userAttributes) => {
-  const isMortgate =
-    userAttributes?.house?.ownershipStatus === OwnershipStatus.Mortgaged;
-  return isMortgate ? riskPoint : 0;
-};
-export const noIncome: RuleFn =
-  (riskPoint) =>
-  ({ income }) =>
-    income ? 0 : riskPoint;
-export const noVehicle: RuleFn =
-  (riskPoint) =>
-  ({ vehicle }) =>
-    vehicle ? 0 : riskPoint;
-export const noHouse: RuleFn =
-  (riskPoint) =>
-  ({ house }) =>
-    house ? 0 : riskPoint;
-export const ageBetween30And40: RuleFn =
-  (riskPoint) =>
-  ({ age }) =>
-    age >= 30 && age <= 40 ? riskPoint : 0;
-export const incomeAbove200k: RuleFn =
-  (riskPoint) =>
-  ({ income }) =>
-    income > 200000 ? riskPoint : 0;
-export const isUnder30: RuleFn =
-  (riskPoint) =>
-  ({ age }) =>
-    age < 30 ? riskPoint : 0;
+type Condition = (userAttributes: UserAttributes) => boolean;
+type getScore = (userAttributes: UserAttributes) => Score;
 
 export const applyRiskPoint = (fn, s) => fn(s);
 export const sumOrFirstIneligible = (
-  arr: Array<getScore>,
+  fnArr: Array<getScore>,
   userAttributes: UserAttributes,
 ) => {
   let score: Score = 0;
-  for (const fn of arr) {
-    const ruleScore = fn(userAttributes);
+  for (const getRuleScore of fnArr) {
+    const ruleScore = getRuleScore(userAttributes);
     if (ruleScore === null) {
       score = null;
       break;
@@ -53,3 +26,26 @@ export const sumOrFirstIneligible = (
   }
   return score;
 };
+
+const makeRule =
+  (condition: Condition) =>
+  (riskPoint: Score) =>
+  (userAttributes: UserAttributes) =>
+    condition(userAttributes) ? riskPoint : 0;
+
+export const houseIsMortgate = makeRule((userAttributes) => {
+  const isMortgate =
+    userAttributes?.house?.ownershipStatus === OwnershipStatus.Mortgaged;
+  return isMortgate;
+});
+export const noIncome = makeRule(({ income }) => !income);
+export const noVehicle = makeRule(({ vehicle }) => !vehicle);
+export const noHouse = makeRule(({ house }) => !house);
+export const incomeAbove200k = makeRule(({ income }) => income > 200000);
+export const ageBetween30And40 = makeRule(({ age }) => age >= 30 && age <= 40);
+export const isUnder30 = makeRule(({ age }) => age < 30);
+export const isOver60 = makeRule(({ age }) => age > 60);
+export const isMarried = makeRule(
+  ({ maritalStatus }) => maritalStatus === MaritalStatus.Married,
+);
+export const hasDependents = makeRule(({ dependents }) => !!dependents);
