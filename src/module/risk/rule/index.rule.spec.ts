@@ -3,12 +3,18 @@ import {
   House,
   OwnershipStatus,
 } from 'src/module/insurance/entities/house.entity';
-import { UserAttributes } from 'src/module/insurance/entities/user-attributes.entity';
+import {
+  MaritalStatus,
+  UserAttributes,
+} from 'src/module/insurance/entities/user-attributes.entity';
 import { Vehicle } from 'src/module/insurance/entities/vehicle.entity';
 import {
   ageBetween30And40,
+  hasDependents,
   houseIsMortgate,
   incomeAbove200k,
+  isMarried,
+  isOver60,
   isUnder30,
   noHouse,
   noIncome,
@@ -91,12 +97,41 @@ describe('RiskSteps', () => {
   );
 
   test.each(range(1, 29))(
-    'should return -2 when is under 30, age %i',
+    'should return %i when is under 30, age %i',
     async (age) => {
       userAttributes.age = age;
       const riskPoint = age;
       const score = isUnder30(riskPoint)(userAttributes);
       expect(score).toBe(riskPoint);
+    },
+  );
+
+  test.each(range(61, 65))(
+    'should return %i when is over 60, age %i',
+    async (age) => {
+      userAttributes.age = age;
+      const riskPoint = age;
+      const score = isOver60(riskPoint)(userAttributes);
+      expect(score).toBe(riskPoint);
+    },
+  );
+
+  test.each(riskPoints)(
+    'should return %s when is married',
+    (riskPoints: Score) => {
+      userAttributes.maritalStatus = MaritalStatus.Married;
+      const score = isMarried(riskPoints)(userAttributes);
+      expect(score).toBe(riskPoints);
+    },
+  );
+
+  test.each(range(1, 5))(
+    'should return %s when has dependents',
+    (dependents) => {
+      userAttributes.dependents = dependents;
+      const riskPoints = dependents;
+      const score = hasDependents(riskPoints)(userAttributes);
+      expect(score).toBe(riskPoints);
     },
   );
 });
