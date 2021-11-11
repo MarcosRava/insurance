@@ -1,6 +1,12 @@
+export enum OwnershipStatusValues {
+  Owned = 'owned',
+  Mortgaged = 'mortgaged',
+}
 export class OwnershipStatus {
-  static readonly Owned = new OwnershipStatus('owned');
-  static readonly Mortgaged = new OwnershipStatus('mortgaged');
+  static readonly Owned = new OwnershipStatus(OwnershipStatusValues.Owned);
+  static readonly Mortgaged = new OwnershipStatus(
+    OwnershipStatusValues.Mortgaged,
+  );
 
   constructor(private value: string) {}
 }
