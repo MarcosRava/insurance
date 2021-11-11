@@ -5,17 +5,18 @@ import {
 } from 'src/module/insurance/entities/personal-information.entity';
 
 export type Score = number | null;
+export type GetScore = (personalInformation: PersonalInformation) => Score;
 export const ineligible: Score = null;
 
 type Condition = (personalInformation: PersonalInformation) => boolean;
-type getScore = (personalInformation: PersonalInformation) => Score;
 
-export const applyRiskPoint = (fn, s) => fn(s);
+export const applyRiskPoint = (fn, s): GetScore => fn(s);
 export const sumOrFirstIneligible = (
-  fnArr: Array<getScore>,
+  initialScore: Score,
+  fnArr: Array<GetScore>,
   personalInformation: PersonalInformation,
 ) => {
-  let score: Score = 0;
+  let score: Score = initialScore;
   for (const getRuleScore of fnArr) {
     const ruleScore = getRuleScore(personalInformation);
     if (ruleScore === null) {
@@ -49,3 +50,7 @@ export const isMarried = makeRule(
   ({ maritalStatus }) => maritalStatus === MaritalStatus.Married,
 );
 export const hasDependents = makeRule(({ dependents }) => !!dependents);
+export const wasVehicleProducedLast5years = makeRule(
+  (personalInformation) =>
+    new Date().getFullYear() - personalInformation.vehicle.year <= 5,
+);

@@ -20,6 +20,7 @@ import {
   noIncome,
   noVehicle,
   Score,
+  wasVehicleProducedLast5years,
 } from './index.rule';
 
 describe('RiskSteps', () => {
@@ -131,6 +132,17 @@ describe('RiskSteps', () => {
       personalInformation.dependents = dependents;
       const riskPoints = dependents;
       const score = hasDependents(riskPoints)(personalInformation);
+      expect(score).toBe(riskPoints);
+    },
+  );
+
+  test.each(range(1, 5))(
+    'should return %s when vehicle was produced in the last 5 years',
+    (year) => {
+      personalInformation.vehicle.year = new Date().getFullYear() - year;
+      const riskPoints = year;
+      const score =
+        wasVehicleProducedLast5years(riskPoints)(personalInformation);
       expect(score).toBe(riskPoints);
     },
   );

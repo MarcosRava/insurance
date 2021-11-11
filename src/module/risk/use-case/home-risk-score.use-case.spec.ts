@@ -6,17 +6,20 @@ import {
 } from 'src/module/insurance/entities/house.entity';
 import { PersonalInformation } from 'src/module/insurance/entities/personal-information.entity';
 import { Vehicle } from 'src/module/insurance/entities/vehicle.entity';
+import { Score } from '../rule/index.rule';
 import { HomeRiskScoreUseCase } from './home-risk-score.use-case';
 
 describe('HomeRiskScoreUseCase', () => {
   let usecase: HomeRiskScoreUseCase;
   let personalInformation: PersonalInformation;
+  let initialScore: Score;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [HomeRiskScoreUseCase],
     }).compile();
 
+    initialScore = 0;
     usecase = module.get<HomeRiskScoreUseCase>(HomeRiskScoreUseCase);
     personalInformation = new PersonalInformation();
     personalInformation.age = 50;
@@ -37,25 +40,25 @@ describe('HomeRiskScoreUseCase', () => {
     const anyValue = 234;
     personalInformation.income = anyValue;
     personalInformation.house.ownershipStatus = OwnershipStatus.Mortgaged;
-    const score = await usecase.execute(personalInformation);
+    const score = await usecase.execute(personalInformation, initialScore);
     expect(score).toBe(1);
   });
 
   it('should return null when has no income', async () => {
     personalInformation.income = 0;
-    const score = await usecase.execute(personalInformation);
+    const score = await usecase.execute(personalInformation, initialScore);
     expect(score).toBe(null);
   });
 
   it('should return null when has no vehicle', async () => {
     personalInformation.vehicle = null;
-    const score = await usecase.execute(personalInformation);
+    const score = await usecase.execute(personalInformation, initialScore);
     expect(score).toBe(null);
   });
 
   it('should return null when has no house', async () => {
     personalInformation.house = null;
-    const score = await usecase.execute(personalInformation);
+    const score = await usecase.execute(personalInformation, initialScore);
     expect(score).toBe(null);
   });
 
@@ -63,7 +66,7 @@ describe('HomeRiskScoreUseCase', () => {
     'should return -1 when age is between 30 and 40, age %i',
     async (age) => {
       personalInformation.age = age;
-      const score = await usecase.execute(personalInformation);
+      const score = await usecase.execute(personalInformation, initialScore);
       expect(score).toBe(-1);
     },
   );
@@ -72,7 +75,7 @@ describe('HomeRiskScoreUseCase', () => {
     'should return -1 when income is above 200k, income %i',
     async (income) => {
       personalInformation.income = income;
-      const score = await usecase.execute(personalInformation);
+      const score = await usecase.execute(personalInformation, initialScore);
       expect(score).toBe(-1);
     },
   );
@@ -81,20 +84,20 @@ describe('HomeRiskScoreUseCase', () => {
     'should return -2 when is under 30, age %i',
     async (age) => {
       personalInformation.age = age;
-      const score = await usecase.execute(personalInformation);
+      const score = await usecase.execute(personalInformation, initialScore);
       expect(score).toBe(-2);
     },
   );
 
   it('should return 0 with default attributes', async () => {
-    const score = await usecase.execute(personalInformation);
+    const score = await usecase.execute(personalInformation, initialScore);
     expect(score).toBe(0);
   });
 
   it('should return -3', async () => {
     personalInformation.age = 29;
     personalInformation.income = 250100;
-    const score = await usecase.execute(personalInformation);
+    const score = await usecase.execute(personalInformation, initialScore);
     expect(score).toBe(-3);
   });
 });
