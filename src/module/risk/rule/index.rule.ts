@@ -52,5 +52,5 @@ export const isMarried = makeRule(
 export const hasDependents = makeRule(({ dependents }) => !!dependents);
 export const wasVehicleProducedLast5years = makeRule(
   (personalInformation) =>
-    new Date().getFullYear() - personalInformation.vehicle.year <= 5,
+    new Date().getFullYear() - personalInformation?.vehicle?.year <= 5,
 );
