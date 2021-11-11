@@ -1,8 +1,8 @@
-import { RiskProfile } from './risk-profile.entity';
+import { InsurancePlan } from './insurance-plan.entity';
 
-describe('RiskProfile', () => {
+describe('InsurancePlan', () => {
   it('should be defined', () => {
-    expect(RiskProfile).toBeDefined();
+    expect(InsurancePlan).toBeDefined();
   });
 
   test.each([
@@ -12,28 +12,28 @@ describe('RiskProfile', () => {
     { score: -3 },
     { score: 0 },
   ])('should return economic profile with score $score', ({ score }) => {
-    const profile = RiskProfile.getProfile(score);
-    expect(profile).toEqual(RiskProfile.Economic);
+    const profile = InsurancePlan.getProfile(score);
+    expect(profile).toEqual(InsurancePlan.Economic);
   });
 
   test.each([{ score: 1 }, { score: 2 }])(
     'should return regular profile with score $score',
     ({ score }) => {
-      const profile = RiskProfile.getProfile(score);
-      expect(profile).toEqual(RiskProfile.Regular);
+      const profile = InsurancePlan.getProfile(score);
+      expect(profile).toEqual(InsurancePlan.Regular);
     },
   );
 
   test.each([{ score: 3 }, { score: 4 }, { score: 5 }])(
     'should return responsible profile with score $score',
     ({ score }) => {
-      const profile = RiskProfile.getProfile(score);
-      expect(profile).toEqual(RiskProfile.Responsible);
+      const profile = InsurancePlan.getProfile(score);
+      expect(profile).toEqual(InsurancePlan.Responsible);
     },
   );
 
   it('should return ineligible profile with score $score', () => {
-    const profile = RiskProfile.getProfile(null);
-    expect(profile).toEqual(RiskProfile.Ineligible);
+    const profile = InsurancePlan.getProfile(null);
+    expect(profile).toEqual(InsurancePlan.Ineligible);
   });
 });
