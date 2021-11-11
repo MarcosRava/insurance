@@ -1,11 +1,15 @@
-import { MaritalStatus, RiskAnswer } from '../entities/user-attributes.entity';
+import {
+  MaritalStatus,
+  RiskAnswer,
+} from '../entities/personal-information.entity';
 import { HouseDto } from './house.dto';
 import { VehicleDto } from './vehicle.dto';
 
 type MaritalStatusDto = MaritalStatus;
 type RiskAnswerDto = RiskAnswer;
 type RiskAnswersDto = [RiskAnswerDto, RiskAnswerDto, RiskAnswerDto];
-export class UserAttributesDto {
+
+export class PersonalInformationDto {
   age: number;
   dependents: number;
   house: HouseDto;

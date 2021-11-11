@@ -5,8 +5,8 @@ import {
 } from 'src/module/insurance/entities/house.entity';
 import {
   MaritalStatus,
-  UserAttributes,
-} from 'src/module/insurance/entities/user-attributes.entity';
+  PersonalInformation,
+} from 'src/module/insurance/entities/personal-information.entity';
 import { Vehicle } from 'src/module/insurance/entities/vehicle.entity';
 import {
   ageBetween30And40,
@@ -23,28 +23,28 @@ import {
 } from './index.rule';
 
 describe('RiskSteps', () => {
-  let userAttributes: UserAttributes;
+  let personalInformation: PersonalInformation;
   const riskPoints: Array<Score> = [1, null, -1, -2];
 
   beforeEach(() => {
-    userAttributes = new UserAttributes();
-    userAttributes.age = 50;
-    userAttributes.dependents = 0;
-    userAttributes.house = new House();
-    userAttributes.house.ownershipStatus = OwnershipStatus.Owned;
-    userAttributes.income = 12;
-    userAttributes.vehicle = new Vehicle();
-    userAttributes.vehicle.year = 2014;
-    userAttributes.riskQuestions = [0, 0, 0];
+    personalInformation = new PersonalInformation();
+    personalInformation.age = 50;
+    personalInformation.dependents = 0;
+    personalInformation.house = new House();
+    personalInformation.house.ownershipStatus = OwnershipStatus.Owned;
+    personalInformation.income = 12;
+    personalInformation.vehicle = new Vehicle();
+    personalInformation.vehicle.year = 2014;
+    personalInformation.riskQuestions = [0, 0, 0];
   });
 
   test.each(riskPoints)(
     'should return %s when house is mortgaged ',
     (riskPoints: Score) => {
       const anyValue = 234;
-      userAttributes.income = anyValue;
-      userAttributes.house.ownershipStatus = OwnershipStatus.Mortgaged;
-      const score = houseIsMortgate(riskPoints)(userAttributes);
+      personalInformation.income = anyValue;
+      personalInformation.house.ownershipStatus = OwnershipStatus.Mortgaged;
+      const score = houseIsMortgate(riskPoints)(personalInformation);
       expect(score).toBe(riskPoints);
     },
   );
@@ -52,8 +52,8 @@ describe('RiskSteps', () => {
   test.each(riskPoints)(
     'should return %s when has no income',
     (riskPoints: Score) => {
-      userAttributes.income = 0;
-      const score = noIncome(riskPoints)(userAttributes);
+      personalInformation.income = 0;
+      const score = noIncome(riskPoints)(personalInformation);
       expect(score).toBe(riskPoints);
     },
   );
@@ -61,8 +61,8 @@ describe('RiskSteps', () => {
   test.each(riskPoints)(
     'should return %s when has no vehicle',
     (riskPoints: Score) => {
-      userAttributes.vehicle = null;
-      const score = noVehicle(riskPoints)(userAttributes);
+      personalInformation.vehicle = null;
+      const score = noVehicle(riskPoints)(personalInformation);
       expect(score).toBe(riskPoints);
     },
   );
@@ -70,8 +70,8 @@ describe('RiskSteps', () => {
   test.each(riskPoints)(
     'should return %s when has no house',
     (riskPoints: Score) => {
-      userAttributes.house = null;
-      const score = noHouse(riskPoints)(userAttributes);
+      personalInformation.house = null;
+      const score = noHouse(riskPoints)(personalInformation);
       expect(score).toBe(riskPoints);
     },
   );
@@ -79,9 +79,9 @@ describe('RiskSteps', () => {
   test.each(range(30, 40))(
     'should return -1 when age is between 30 and 40, age %i',
     async (age) => {
-      userAttributes.age = age;
+      personalInformation.age = age;
       const riskPoint = age;
-      const score = ageBetween30And40(riskPoint)(userAttributes);
+      const score = ageBetween30And40(riskPoint)(personalInformation);
       expect(score).toBe(riskPoint);
     },
   );
@@ -89,9 +89,9 @@ describe('RiskSteps', () => {
   test.each(range(200001, 200008).concat(500000))(
     'should return -1 when income is above 200k, income %i',
     async (income) => {
-      userAttributes.income = income;
+      personalInformation.income = income;
       const riskPoint = income;
-      const score = incomeAbove200k(riskPoint)(userAttributes);
+      const score = incomeAbove200k(riskPoint)(personalInformation);
       expect(score).toBe(riskPoint);
     },
   );
@@ -99,9 +99,9 @@ describe('RiskSteps', () => {
   test.each(range(1, 29))(
     'should return %i when is under 30, age %i',
     async (age) => {
-      userAttributes.age = age;
+      personalInformation.age = age;
       const riskPoint = age;
-      const score = isUnder30(riskPoint)(userAttributes);
+      const score = isUnder30(riskPoint)(personalInformation);
       expect(score).toBe(riskPoint);
     },
   );
@@ -109,9 +109,9 @@ describe('RiskSteps', () => {
   test.each(range(61, 65))(
     'should return %i when is over 60, age %i',
     async (age) => {
-      userAttributes.age = age;
+      personalInformation.age = age;
       const riskPoint = age;
-      const score = isOver60(riskPoint)(userAttributes);
+      const score = isOver60(riskPoint)(personalInformation);
       expect(score).toBe(riskPoint);
     },
   );
@@ -119,8 +119,8 @@ describe('RiskSteps', () => {
   test.each(riskPoints)(
     'should return %s when is married',
     (riskPoints: Score) => {
-      userAttributes.maritalStatus = MaritalStatus.Married;
-      const score = isMarried(riskPoints)(userAttributes);
+      personalInformation.maritalStatus = MaritalStatus.Married;
+      const score = isMarried(riskPoints)(personalInformation);
       expect(score).toBe(riskPoints);
     },
   );
@@ -128,9 +128,9 @@ describe('RiskSteps', () => {
   test.each(range(1, 5))(
     'should return %s when has dependents',
     (dependents) => {
-      userAttributes.dependents = dependents;
+      personalInformation.dependents = dependents;
       const riskPoints = dependents;
-      const score = hasDependents(riskPoints)(userAttributes);
+      const score = hasDependents(riskPoints)(personalInformation);
       expect(score).toBe(riskPoints);
     },
   );

@@ -11,7 +11,7 @@ export class MaritalStatus {
 export type RiskAnswer = 0 | 1;
 export type RiskAnswers = [RiskAnswer, RiskAnswer, RiskAnswer];
 
-export class UserAttributes {
+export class PersonalInformation {
   age: number;
   dependents: number;
   house: House;

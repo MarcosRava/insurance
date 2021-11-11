@@ -1,23 +1,23 @@
 import { OwnershipStatus } from 'src/module/insurance/entities/house.entity';
 import {
   MaritalStatus,
-  UserAttributes,
-} from 'src/module/insurance/entities/user-attributes.entity';
+  PersonalInformation,
+} from 'src/module/insurance/entities/personal-information.entity';
 
 export type Score = number | null;
 export const ineligible: Score = null;
 
-type Condition = (userAttributes: UserAttributes) => boolean;
-type getScore = (userAttributes: UserAttributes) => Score;
+type Condition = (personalInformation: PersonalInformation) => boolean;
+type getScore = (personalInformation: PersonalInformation) => Score;
 
 export const applyRiskPoint = (fn, s) => fn(s);
 export const sumOrFirstIneligible = (
   fnArr: Array<getScore>,
-  userAttributes: UserAttributes,
+  personalInformation: PersonalInformation,
 ) => {
   let score: Score = 0;
   for (const getRuleScore of fnArr) {
-    const ruleScore = getRuleScore(userAttributes);
+    const ruleScore = getRuleScore(personalInformation);
     if (ruleScore === null) {
       score = null;
       break;
@@ -30,12 +30,12 @@ export const sumOrFirstIneligible = (
 const makeRule =
   (condition: Condition) =>
   (riskPoint: Score) =>
-  (userAttributes: UserAttributes) =>
-    condition(userAttributes) ? riskPoint : 0;
+  (personalInformation: PersonalInformation) =>
+    condition(personalInformation) ? riskPoint : 0;
 
-export const houseIsMortgate = makeRule((userAttributes) => {
+export const houseIsMortgate = makeRule((personalInformation) => {
   const isMortgate =
-    userAttributes?.house?.ownershipStatus === OwnershipStatus.Mortgaged;
+    personalInformation?.house?.ownershipStatus === OwnershipStatus.Mortgaged;
   return isMortgate;
 });
 export const noIncome = makeRule(({ income }) => !income);

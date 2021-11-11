@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { UserAttributesDto } from './dto/user-attributes.dto';
+import { PersonalInformationDto } from './dto/personal-information.dto';
 
 @Injectable()
 export class InsuranceService {
-  riskProfile(userAttributesDto: UserAttributesDto) {
+  riskProfile(personalInformationDto: PersonalInformationDto) {
     return 'This action adds a new insurance';
   }
 }

@@ -1,13 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import {
   RiskAnswers,
-  UserAttributes,
-} from 'src/module/insurance/entities/user-attributes.entity';
+  PersonalInformation,
+} from 'src/module/insurance/entities/personal-information.entity';
 import { BaseScoreUseCase } from './base-score.use-case';
 
 describe('BaseScoreUseCase', () => {
   let usecase: BaseScoreUseCase;
-  let userAttributes: UserAttributes;
+  let personalInformation: PersonalInformation;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -15,7 +15,7 @@ describe('BaseScoreUseCase', () => {
     }).compile();
 
     usecase = module.get<BaseScoreUseCase>(BaseScoreUseCase);
-    userAttributes = new UserAttributes();
+    personalInformation = new PersonalInformation();
   });
 
   it('should be defined', () => {
@@ -30,8 +30,8 @@ describe('BaseScoreUseCase', () => {
   ])(
     'should calculate base score from $answer',
     async ({ answer, expected }) => {
-      userAttributes.riskQuestions = answer as RiskAnswers;
-      const baseScore = await usecase.execute(userAttributes);
+      personalInformation.riskQuestions = answer as RiskAnswers;
+      const baseScore = await usecase.execute(personalInformation);
       expect(baseScore).toBe(expected);
     },
   );

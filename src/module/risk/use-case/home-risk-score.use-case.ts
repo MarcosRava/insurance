@@ -1,4 +1,4 @@
-import { UserAttributes } from 'src/module/insurance/entities/user-attributes.entity';
+import { PersonalInformation } from 'src/module/insurance/entities/personal-information.entity';
 import {
   houseIsMortgate,
   noIncome,
@@ -21,7 +21,7 @@ const incomeAbove200kRule = applyRiskPoint(incomeAbove200k, -1);
 const isUnder30Rule = applyRiskPoint(isUnder30, -2);
 
 export class HomeRiskScoreUseCase {
-  async execute(userAttributes: UserAttributes): Promise<number> {
+  async execute(personalInformation: PersonalInformation): Promise<number> {
     return sumOrFirstIneligible(
       [
         houseIsMortgateRule,
@@ -32,7 +32,7 @@ export class HomeRiskScoreUseCase {
         incomeAbove200kRule,
         isUnder30Rule,
       ],
-      userAttributes,
+      personalInformation,
     );
   }
 }
