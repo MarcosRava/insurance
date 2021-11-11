@@ -1,6 +1,6 @@
-import { InsurancePlan } from 'src/module/insurance/enum/insurance-plan.enum';
+import { InsurancePlanValues } from 'src/module/insurance/enum/insurance-plan.enum';
 
-type InsurancePlanDto = InsurancePlan; // TODO change to simple enum if possible
+type InsurancePlanDto = InsurancePlanValues;
 export class RiskProfileDto {
   auto: InsurancePlanDto;
   disability: InsurancePlanDto;
