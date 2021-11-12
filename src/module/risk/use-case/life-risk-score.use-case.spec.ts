@@ -3,7 +3,6 @@ import { range } from 'src/common/util/array';
 import { PersonalInformationDto } from 'src/module/insurance/dto/personal-information.dto';
 import { OwnershipStatusValues } from 'src/module/insurance/entities/house.entity';
 import { MaritalStatusValues } from 'src/module/insurance/entities/personal-information.entity';
-import { Vehicle } from 'src/module/insurance/entities/vehicle.entity';
 import { mapDto } from 'src/module/insurance/map/personal-information.map';
 import { fake } from 'test/mock';
 import { Score } from '../rule/index.rule';
