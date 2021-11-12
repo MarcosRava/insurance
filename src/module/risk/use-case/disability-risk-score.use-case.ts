@@ -4,7 +4,6 @@ import {
   noVehicle,
   noHouse,
   applyRiskPoint,
-  ineligible,
   hasDependents,
   isOver60,
   isMarried,
