@@ -7,10 +7,15 @@ import {
 export type Score = number | null;
 export type GetScore = (personalInformation: PersonalInformation) => Score;
 export const ineligible: Score = null;
+export const plusOne: Score = 1;
+export const plusTwo: Score = 2;
+export const subtractOne: Score = -1;
+export const subtractTwo: Score = -2;
 
 type Condition = (personalInformation: PersonalInformation) => boolean;
 
 export const applyRiskPoint = (fn, s): GetScore => fn(s);
+export const setAsIneligible = (fn) => applyRiskPoint(fn, ineligible);
 export const sumOrFirstIneligible = (
   initialScore: Score,
   fnArr: Array<GetScore>,
@@ -36,12 +41,15 @@ const makeRule =
 
 export const houseIsMortgate = makeRule((personalInformation) => {
   const isMortgate =
-    personalInformation?.house?.ownershipStatus === OwnershipStatus.Mortgaged;
+    personalInformation?.houses[0]?.ownershipStatus ===
+    OwnershipStatus.Mortgaged;
   return isMortgate;
 });
 export const noIncome = makeRule(({ income }) => !income);
-export const noVehicle = makeRule(({ vehicle }) => !vehicle);
-export const noHouse = makeRule(({ house }) => !house);
+export const noVehicle = makeRule(
+  ({ vehicles }) => !vehicles || !vehicles.length,
+);
+export const noHouse = makeRule(({ houses }) => !houses || !houses.length);
 export const incomeAbove200k = makeRule(({ income }) => income > 200000);
 export const ageBetween30And40 = makeRule(({ age }) => age >= 30 && age <= 40);
 export const isUnder30 = makeRule(({ age }) => age < 30);
@@ -51,6 +59,5 @@ export const isMarried = makeRule(
 );
 export const hasDependents = makeRule(({ dependents }) => !!dependents);
 export const wasVehicleProducedLast5years = makeRule(
-  (personalInformation) =>
-    new Date().getFullYear() - personalInformation?.vehicle?.year <= 5,
+  ({ vehicles }) => new Date().getFullYear() - vehicles[0]?.year <= 5,
 );

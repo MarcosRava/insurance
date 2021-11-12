@@ -17,7 +17,7 @@ import {
 import { HouseDto } from './house.dto';
 import { VehicleDto } from './vehicle.dto';
 
-type RiskAnswerDto = RiskAnswer;
+export type RiskAnswerDto = RiskAnswer;
 type RiskAnswersDto = [RiskAnswerDto, RiskAnswerDto, RiskAnswerDto];
 type MaritalStatusDto = MaritalStatusValues;
 

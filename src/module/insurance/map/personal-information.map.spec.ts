@@ -34,12 +34,32 @@ describe('PersonalInformationMapDto', () => {
       income: 200,
       maritalStatus: MaritalStatus.Married,
       riskQuestions: [1, 1, 0],
-      house: {
-        ownershipStatus: OwnershipStatus.Owned,
-      },
-      vehicle: {
-        year: 2012,
-      },
+      houses: [
+        {
+          ownershipStatus: OwnershipStatus.Owned,
+        },
+      ],
+      vehicles: [
+        {
+          year: 2012,
+        },
+      ],
+    };
+    const entity = mapDto(dto);
+    expect(entity).toEqual(expected);
+  });
+
+  it('should map dto to entity with empty arrays', () => {
+    delete dto.house;
+    delete dto.vehicle;
+    const expected = {
+      age: 30,
+      dependents: 1,
+      income: 200,
+      maritalStatus: MaritalStatus.Married,
+      riskQuestions: [1, 1, 0],
+      houses: [],
+      vehicles: [],
     };
     const entity = mapDto(dto);
     expect(entity).toEqual(expected);

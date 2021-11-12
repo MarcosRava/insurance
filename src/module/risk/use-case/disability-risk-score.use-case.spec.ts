@@ -1,20 +1,17 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { range } from 'src/common/util/array';
-import {
-  House,
-  OwnershipStatus,
-} from 'src/module/insurance/entities/house.entity';
-import {
-  MaritalStatus,
-  PersonalInformation,
-} from 'src/module/insurance/entities/personal-information.entity';
+import { PersonalInformationDto } from 'src/module/insurance/dto/personal-information.dto';
+import { OwnershipStatusValues } from 'src/module/insurance/entities/house.entity';
+import { MaritalStatusValues } from 'src/module/insurance/entities/personal-information.entity';
 import { Vehicle } from 'src/module/insurance/entities/vehicle.entity';
+import { mapDto } from 'src/module/insurance/map/personal-information.map';
+import { fake } from 'test/mock';
 import { Score } from '../rule/index.rule';
 import { DisabilityRiskScoreUseCase } from './disability-risk-score.use-case';
 
 describe('DisabilityRiskScoreUseCase', () => {
   let usecase: DisabilityRiskScoreUseCase;
-  let personalInformation: PersonalInformation;
+  let personalInformationDto: PersonalInformationDto;
   let initialScore: Score;
 
   beforeEach(async () => {
@@ -26,15 +23,14 @@ describe('DisabilityRiskScoreUseCase', () => {
     usecase = module.get<DisabilityRiskScoreUseCase>(
       DisabilityRiskScoreUseCase,
     );
-    personalInformation = new PersonalInformation();
-    personalInformation.age = 50;
-    personalInformation.dependents = 0;
-    personalInformation.house = new House();
-    personalInformation.house.ownershipStatus = OwnershipStatus.Owned;
-    personalInformation.income = 12;
-    personalInformation.vehicle = new Vehicle();
-    personalInformation.vehicle.year = 2014;
-    personalInformation.riskQuestions = [0, 0, 0];
+    personalInformationDto = fake(PersonalInformationDto);
+    personalInformationDto.age = 50;
+    personalInformationDto.dependents = 0;
+    personalInformationDto.house.ownership_status = OwnershipStatusValues.Owned;
+    personalInformationDto.marital_status = MaritalStatusValues.Single;
+    personalInformationDto.income = 12;
+    personalInformationDto.vehicle.year = 2014;
+    personalInformationDto.risk_questions = [0, 0, 0];
   });
 
   it('should be defined', () => {
@@ -43,41 +39,60 @@ describe('DisabilityRiskScoreUseCase', () => {
 
   it('should return 1 when house is mortgaged ', async () => {
     const anyValue = 234;
-    personalInformation.income = anyValue;
-    personalInformation.house.ownershipStatus = OwnershipStatus.Mortgaged;
-    const score = await usecase.execute(personalInformation, initialScore);
+    personalInformationDto.income = anyValue;
+    personalInformationDto.house.ownership_status =
+      OwnershipStatusValues.Mortgaged;
+    const score = await usecase.execute(
+      mapDto(personalInformationDto),
+      initialScore,
+    );
     expect(score).toBe(1);
   });
 
   it('should return 1 when has dependents', async () => {
-    personalInformation.dependents = 1;
-    const score = await usecase.execute(personalInformation, initialScore);
+    personalInformationDto.dependents = 1;
+    const score = await usecase.execute(
+      mapDto(personalInformationDto),
+      initialScore,
+    );
     expect(score).toBe(1);
   });
 
   it('should return null when has no income', async () => {
-    personalInformation.income = 0;
-    const score = await usecase.execute(personalInformation, initialScore);
+    personalInformationDto.income = 0;
+    const score = await usecase.execute(
+      mapDto(personalInformationDto),
+      initialScore,
+    );
     expect(score).toBe(null);
   });
 
   it('should return null when has no vehicle', async () => {
-    personalInformation.vehicle = null;
-    const score = await usecase.execute(personalInformation, initialScore);
+    personalInformationDto.vehicle = null;
+    const score = await usecase.execute(
+      mapDto(personalInformationDto),
+      initialScore,
+    );
     expect(score).toBe(null);
   });
 
   it('should return null when has no house', async () => {
-    personalInformation.house = null;
-    const score = await usecase.execute(personalInformation, initialScore);
+    personalInformationDto.house = null;
+    const score = await usecase.execute(
+      mapDto(personalInformationDto),
+      initialScore,
+    );
     expect(score).toBe(null);
   });
 
   test.each(range(61, 65))(
     'should return null when is over 60 years, age %i',
     async (age) => {
-      personalInformation.age = age;
-      const score = await usecase.execute(personalInformation, initialScore);
+      personalInformationDto.age = age;
+      const score = await usecase.execute(
+        mapDto(personalInformationDto),
+        initialScore,
+      );
       expect(score).toBe(null);
     },
   );
@@ -85,8 +100,11 @@ describe('DisabilityRiskScoreUseCase', () => {
   test.each(range(30, 40))(
     'should return -1 when age is between 30 and 40, age %i',
     async (age) => {
-      personalInformation.age = age;
-      const score = await usecase.execute(personalInformation, initialScore);
+      personalInformationDto.age = age;
+      const score = await usecase.execute(
+        mapDto(personalInformationDto),
+        initialScore,
+      );
       expect(score).toBe(-1);
     },
   );
@@ -94,36 +112,51 @@ describe('DisabilityRiskScoreUseCase', () => {
   test.each(range(200001, 200008).concat(500000))(
     'should return -1 when income is above 200k, income %i',
     async (income) => {
-      personalInformation.income = income;
-      const score = await usecase.execute(personalInformation, initialScore);
+      personalInformationDto.income = income;
+      const score = await usecase.execute(
+        mapDto(personalInformationDto),
+        initialScore,
+      );
       expect(score).toBe(-1);
     },
   );
   it('should return -1 when is married', async () => {
-    personalInformation.maritalStatus = MaritalStatus.Married;
-    const score = await usecase.execute(personalInformation, initialScore);
+    personalInformationDto.marital_status = MaritalStatusValues.Married;
+    const score = await usecase.execute(
+      mapDto(personalInformationDto),
+      initialScore,
+    );
     expect(score).toBe(-1);
   });
 
   test.each(range(1, 29))(
     'should return -2 when is under 30, age %i',
     async (age) => {
-      personalInformation.age = age;
-      const score = await usecase.execute(personalInformation, initialScore);
+      personalInformationDto.age = age;
+      const score = await usecase.execute(
+        mapDto(personalInformationDto),
+        initialScore,
+      );
       expect(score).toBe(-2);
     },
   );
 
-  it('should return 0 with default attributes', async () => {
-    const score = await usecase.execute(personalInformation, initialScore);
+  it('should return 0 when rules not affected', async () => {
+    const score = await usecase.execute(
+      mapDto(personalInformationDto),
+      initialScore,
+    );
     expect(score).toBe(0);
   });
 
-  it('should return -4', async () => {
-    personalInformation.age = 29;
-    personalInformation.income = 250100;
-    personalInformation.maritalStatus = MaritalStatus.Married;
-    const score = await usecase.execute(personalInformation, initialScore);
+  it('should return -4 when rules under 30 years, income over 200k and is married match', async () => {
+    personalInformationDto.age = 29;
+    personalInformationDto.income = 250100;
+    personalInformationDto.marital_status = MaritalStatusValues.Married;
+    const score = await usecase.execute(
+      mapDto(personalInformationDto),
+      initialScore,
+    );
     expect(score).toBe(-4);
   });
 });

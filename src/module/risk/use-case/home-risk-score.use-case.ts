@@ -4,14 +4,15 @@ import {
   noVehicle,
   noHouse,
   applyRiskPoint,
-  ineligible,
+  setAsIneligible,
+  plusOne,
 } from '../rule/index.rule';
 import { RiskScoreUseCase } from './risk-score.use-case';
 
-const houseIsMortgateRule = applyRiskPoint(houseIsMortgate, 1);
-const noIncomeRule = applyRiskPoint(noIncome, ineligible);
-const noVehicleRule = applyRiskPoint(noVehicle, ineligible);
-const noHouseRule = applyRiskPoint(noHouse, ineligible);
+const houseIsMortgateRule = applyRiskPoint(houseIsMortgate, plusOne);
+const noIncomeRule = setAsIneligible(noIncome);
+const noVehicleRule = setAsIneligible(noVehicle);
+const noHouseRule = setAsIneligible(noHouse);
 
 export class HomeRiskScoreUseCase extends RiskScoreUseCase {
   insuranceRules = [

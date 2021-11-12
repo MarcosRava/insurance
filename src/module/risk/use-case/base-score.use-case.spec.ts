@@ -1,13 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import {
-  RiskAnswers,
-  PersonalInformation,
-} from 'src/module/insurance/entities/personal-information.entity';
+import { PersonalInformationDto } from 'src/module/insurance/dto/personal-information.dto';
+import { RiskAnswers } from 'src/module/insurance/entities/personal-information.entity';
+import { mapDto } from 'src/module/insurance/map/personal-information.map';
+import { fake } from 'test/mock';
 import { BaseScoreUseCase } from './base-score.use-case';
 
 describe('BaseScoreUseCase', () => {
   let usecase: BaseScoreUseCase;
-  let personalInformation: PersonalInformation;
+  let personalInformationDto: PersonalInformationDto;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -15,7 +15,7 @@ describe('BaseScoreUseCase', () => {
     }).compile();
 
     usecase = module.get<BaseScoreUseCase>(BaseScoreUseCase);
-    personalInformation = new PersonalInformation();
+    personalInformationDto = fake(PersonalInformationDto);
   });
 
   it('should be defined', () => {
@@ -30,8 +30,8 @@ describe('BaseScoreUseCase', () => {
   ])(
     'should calculate base score from $answer',
     async ({ answer, expected }) => {
-      personalInformation.riskQuestions = answer as RiskAnswers;
-      const baseScore = await usecase.execute(personalInformation);
+      personalInformationDto.risk_questions = answer as RiskAnswers;
+      const baseScore = await usecase.execute(mapDto(personalInformationDto));
       expect(baseScore).toBe(expected);
     },
   );

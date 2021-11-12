@@ -7,21 +7,28 @@ import { Vehicle } from '../entities/vehicle.entity';
 import { PersonalInformationDto } from '../dto/personal-information.dto';
 
 export const mapDto = (dto: PersonalInformationDto): PersonalInformation => {
-  const entity = new PersonalInformation();
-  entity.age = dto.age;
-  entity.dependents = dto.dependents;
-  entity.income = dto.income;
-  entity.riskQuestions = dto.risk_questions;
-  entity.maritalStatus = MaritalStatus.getFromValue(dto.marital_status);
-  if (dto.vehicle) {
-    entity.vehicle = new Vehicle();
-    entity.vehicle.year = dto.vehicle.year;
-  }
+  const houses: House[] = [];
+  const vehicles: Vehicle[] = [];
   if (dto.house) {
-    entity.house = new House();
-    entity.house.ownershipStatus = OwnershipStatus.getFromValue(
+    const house = new House();
+    house.ownershipStatus = OwnershipStatus.getFromValue(
       dto.house.ownership_status,
     );
+    houses.push(house);
   }
+  if (dto.vehicle) {
+    const vehicle = new Vehicle();
+    vehicle.year = dto.vehicle.year;
+    vehicles.push(vehicle);
+  }
+  const entity = new PersonalInformation(
+    dto.age,
+    dto.dependents,
+    houses,
+    dto.income,
+    MaritalStatus.getFromValue(dto.marital_status),
+    dto.risk_questions,
+    vehicles,
+  );
   return entity;
 };
