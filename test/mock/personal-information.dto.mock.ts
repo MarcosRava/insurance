@@ -1,16 +1,16 @@
 import * as faker from 'faker';
 import { HouseDto } from 'src/module/insurance/dto/house.dto';
-import {
-  PersonalInformationDto,
-  RiskAnswerDto,
-} from 'src/module/insurance/dto/personal-information.dto';
+import { PersonalInformationDto } from 'src/module/insurance/dto/personal-information.dto';
 import { VehicleDto } from 'src/module/insurance/dto/vehicle.dto';
-import { MaritalStatusValues } from 'src/module/insurance/entities/personal-information.entity';
+import {
+  MaritalStatusValues,
+  RiskAnswer,
+} from 'src/module/insurance/entities/personal-information.entity';
 import { fake } from '.';
 
 export const personalInformationDtoFaker = () => {
-  const answer: () => RiskAnswerDto = () =>
-    faker.helpers.randomize<RiskAnswerDto>([0, 1]);
+  const answer: () => RiskAnswer = () =>
+    faker.helpers.randomize<RiskAnswer>([0, 1]);
   const maritalStatus = () =>
     faker.helpers.randomize<MaritalStatusValues>(
       Object.values(MaritalStatusValues),

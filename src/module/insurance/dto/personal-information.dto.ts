@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
   ArrayMaxSize,
   ArrayMinSize,
@@ -10,15 +11,10 @@ import {
   Min,
   ValidateNested,
 } from 'class-validator';
-import {
-  MaritalStatusValues,
-  RiskAnswer,
-} from '../entities/personal-information.entity';
+import { MaritalStatusValues } from '../entities/personal-information.entity';
 import { HouseDto } from './house.dto';
 import { VehicleDto } from './vehicle.dto';
 
-export type RiskAnswerDto = RiskAnswer;
-type RiskAnswersDto = [RiskAnswerDto, RiskAnswerDto, RiskAnswerDto];
 type MaritalStatusDto = MaritalStatusValues;
 
 export class PersonalInformationDto {
@@ -51,7 +47,8 @@ export class PersonalInformationDto {
   @IsDefined()
   @Min(0, { each: true })
   @Max(1, { each: true })
-  risk_questions: RiskAnswersDto;
+  @ApiProperty({ example: [0, 1, 0] })
+  risk_questions: Array<number>;
 
   @ValidateNested()
   @IsOptional()

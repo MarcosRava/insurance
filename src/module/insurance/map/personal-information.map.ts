@@ -2,6 +2,7 @@ import { House, OwnershipStatus } from '../entities/house.entity';
 import {
   MaritalStatus,
   PersonalInformation,
+  RiskAnswers,
 } from '../entities/personal-information.entity';
 import { Vehicle } from '../entities/vehicle.entity';
 import { PersonalInformationDto } from '../dto/personal-information.dto';
@@ -27,7 +28,7 @@ export const mapDto = (dto: PersonalInformationDto): PersonalInformation => {
     houses,
     dto.income,
     MaritalStatus.getFromValue(dto.marital_status),
-    dto.risk_questions,
+    dto.risk_questions as RiskAnswers,
     vehicles,
   );
   return entity;
