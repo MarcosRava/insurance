@@ -8,13 +8,14 @@ import {
 } from 'src/module/insurance/entities/personal-information.entity';
 import { fake } from '.';
 
+export const answer: () => RiskAnswer = () =>
+  faker.helpers.randomize<RiskAnswer>([0, 1]);
+const maritalStatus = () =>
+  faker.helpers.randomize<MaritalStatusValues>(
+    Object.values(MaritalStatusValues),
+  );
+
 export const personalInformationDtoFaker = () => {
-  const answer: () => RiskAnswer = () =>
-    faker.helpers.randomize<RiskAnswer>([0, 1]);
-  const maritalStatus = () =>
-    faker.helpers.randomize<MaritalStatusValues>(
-      Object.values(MaritalStatusValues),
-    );
   const instance = new PersonalInformationDto();
   instance.house = fake(HouseDto);
   instance.vehicle = fake(VehicleDto);

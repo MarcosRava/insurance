@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import {
   ArrayMaxSize,
   ArrayMinSize,
@@ -30,6 +31,7 @@ export class PersonalInformationDto {
 
   @ValidateNested()
   @IsOptional()
+  @Type(() => HouseDto)
   house?: HouseDto;
 
   @IsInt()
@@ -52,5 +54,6 @@ export class PersonalInformationDto {
 
   @ValidateNested()
   @IsOptional()
+  @Type(() => VehicleDto)
   vehicle?: VehicleDto;
 }
