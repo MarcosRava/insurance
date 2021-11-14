@@ -1,7 +1,7 @@
 import { HouseDto } from 'src/module/insurance/dto/house.dto';
 import { PersonalInformationDto } from 'src/module/insurance/dto/personal-information.dto';
 import { VehicleDto } from 'src/module/insurance/dto/vehicle.dto';
-import { RiskProfileDto } from 'src/module/risk/dto/risk-profile.dto';
+import { RiskProfileDto } from 'src/module/insurance/dto/risk-profile.dto';
 import { houseDtoFaker } from './house.dto.mock';
 import { personalInformationDtoFaker } from './personal-information.dto.mock';
 import { riskProfileDtoFaker } from './risk-profile.dto.mock';

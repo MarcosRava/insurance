@@ -1,5 +1,5 @@
 import { Body, Controller, HttpCode, Post } from '@nestjs/common';
-import { RiskProfileDto } from '../risk/dto/risk-profile.dto';
+import { RiskProfileDto } from './dto/risk-profile.dto';
 import { PersonalInformationDto } from './dto/personal-information.dto';
 import { InsuranceService } from './insurance.service';
 

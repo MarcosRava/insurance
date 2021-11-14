@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { RiskProfileDto } from '../risk/dto/risk-profile.dto';
+import { RiskProfileDto } from './dto/risk-profile.dto';
 import { RiskService } from '../risk/risk.service';
 import { Score } from '../risk/rule/index.rule';
 import { PersonalInformationDto } from './dto/personal-information.dto';

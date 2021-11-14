@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { fake } from 'test/mock';
 import { anyOfClass, anything, instance, mock, verify, when } from 'ts-mockito';
-import { RiskProfileDto } from '../risk/dto/risk-profile.dto';
+import { RiskProfileDto } from './dto/risk-profile.dto';
 import { PersonalInformationDto } from './dto/personal-information.dto';
 import { InsuranceController } from './insurance.controller';
 import { InsuranceService } from './insurance.service';

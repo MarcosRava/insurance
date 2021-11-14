@@ -1,6 +1,6 @@
 import * as faker from 'faker';
 import { InsurancePlanValues } from 'src/module/insurance/enum/insurance-plan.enum';
-import { RiskProfileDto } from 'src/module/risk/dto/risk-profile.dto';
+import { RiskProfileDto } from 'src/module/insurance/dto/risk-profile.dto';
 
 const plan: () => InsurancePlanValues = () =>
   faker.helpers.randomize<InsurancePlanValues>([
