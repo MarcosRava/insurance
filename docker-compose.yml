@@ -1,0 +1,10 @@
+version: '2'
+services:
+  app:
+    build: .
+    command: npm run start:dev
+    volumes:
+      - .:/usr/app/
+      - /usr/app/node_modules
+    ports:
+      - '$INSURANCE_HTTP_PORT:$INSURANCE_HTTP_PORT'
