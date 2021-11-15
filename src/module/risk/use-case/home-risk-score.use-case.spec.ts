@@ -26,7 +26,7 @@ describe('HomeRiskScoreUseCase', () => {
     personalInformationDto.house.ownership_status = OwnershipStatusValues.Owned;
     personalInformationDto.marital_status = MaritalStatusValues.Single;
     personalInformationDto.income = 12;
-    personalInformationDto.vehicle.year = 2014;
+    personalInformationDto.vehicle.year = new Date().getFullYear() - 6;
     personalInformationDto.risk_questions = [0, 0, 0];
   });
 
