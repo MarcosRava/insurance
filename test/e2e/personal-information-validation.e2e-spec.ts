@@ -5,8 +5,8 @@ import * as request from 'supertest';
 import { StatusCodes } from 'http-status-codes';
 import { AppModule } from 'src/module/app.module';
 import { PersonalInformationDto } from 'src/module/insurance/dto/personal-information.dto';
-import { fake } from './mock';
-import { answer as validAnswer } from './mock/personal-information.dto.mock';
+import { fake } from '../mock';
+import { answer as validAnswer } from '../mock/personal-information.dto.mock';
 
 describe('Personal information validation - InsuranceController (e2e)', () => {
   let app: INestApplication;
@@ -52,11 +52,10 @@ describe('Personal information validation - InsuranceController (e2e)', () => {
         'should return bad request with age %s',
         async (age) => {
           personalInformation.age = age;
-          const response = await request(app.getHttpServer())
+          await request(app.getHttpServer())
             .post('/insurance/profile')
             .send(personalInformation)
             .expect(StatusCodes.BAD_REQUEST);
-          console.log(response.body);
         },
       );
 
@@ -64,11 +63,10 @@ describe('Personal information validation - InsuranceController (e2e)', () => {
         'should return bad request with dependents %s',
         async (dependents) => {
           personalInformation.dependents = dependents;
-          const response = await request(app.getHttpServer())
+          await request(app.getHttpServer())
             .post('/insurance/profile')
             .send(personalInformation)
             .expect(StatusCodes.BAD_REQUEST);
-          console.log(response.body);
         },
       );
 
@@ -76,11 +74,10 @@ describe('Personal information validation - InsuranceController (e2e)', () => {
         'should return bad request with income %s',
         async (income) => {
           personalInformation.income = income;
-          const response = await request(app.getHttpServer())
+          await request(app.getHttpServer())
             .post('/insurance/profile')
             .send(personalInformation)
             .expect(StatusCodes.BAD_REQUEST);
-          console.log(response.body);
         },
       );
 
@@ -100,11 +97,10 @@ describe('Personal information validation - InsuranceController (e2e)', () => {
         'should return bad request with marital status %s',
         async (marital_status) => {
           personalInformation.marital_status = marital_status;
-          const response = await request(app.getHttpServer())
+          await request(app.getHttpServer())
             .post('/insurance/profile')
             .send(personalInformation)
             .expect(StatusCodes.BAD_REQUEST);
-          console.log(response.body);
         },
       );
 
@@ -122,12 +118,10 @@ describe('Personal information validation - InsuranceController (e2e)', () => {
         'should return bad request with risk questions %s',
         async (risk_questions) => {
           personalInformation.risk_questions = risk_questions;
-          console.log(personalInformation);
-          const response = await request(app.getHttpServer())
+          await request(app.getHttpServer())
             .post('/insurance/profile')
             .send(personalInformation)
             .expect(StatusCodes.BAD_REQUEST);
-          console.log(response.body);
         },
       );
 
@@ -147,11 +141,10 @@ describe('Personal information validation - InsuranceController (e2e)', () => {
         'should return bad request with house.ownership_status %s',
         async (ownership_status) => {
           personalInformation.house.ownership_status = ownership_status;
-          const response = await request(app.getHttpServer())
+          await request(app.getHttpServer())
             .post('/insurance/profile')
             .send(personalInformation)
             .expect(StatusCodes.BAD_REQUEST);
-          console.log(response.body);
         },
       );
 
@@ -159,11 +152,10 @@ describe('Personal information validation - InsuranceController (e2e)', () => {
         'should return bad request with vehicle.year %s',
         async (year) => {
           personalInformation.vehicle.year = year;
-          const response = await request(app.getHttpServer())
+          await request(app.getHttpServer())
             .post('/insurance/profile')
             .send(personalInformation)
             .expect(StatusCodes.BAD_REQUEST);
-          console.log(response.body);
         },
       );
     });
