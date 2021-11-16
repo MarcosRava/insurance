@@ -5,16 +5,17 @@ import {
 } from 'src/module/insurance/entities/personal-information.entity';
 
 export type Score = number | null;
+export type RiskPoint = Score;
 export type GetScore = (personalInformation: PersonalInformation) => Score;
-export const ineligible: Score = null;
-export const plusOne: Score = 1;
-export const plusTwo: Score = 2;
-export const subtractOne: Score = -1;
-export const subtractTwo: Score = -2;
+export const ineligible: RiskPoint = null;
+export const plusOne: RiskPoint = 1;
+export const plusTwo: RiskPoint = 2;
+export const subtractOne: RiskPoint = -1;
+export const subtractTwo: RiskPoint = -2;
 
 type Condition = (personalInformation: PersonalInformation) => boolean;
 
-export const applyRiskPoint = (fn, s): GetScore => fn(s);
+export const applyRiskPoint = (fn, points: RiskPoint): GetScore => fn(points);
 export const setAsIneligible = (fn) => applyRiskPoint(fn, ineligible);
 export const sumOrFirstIneligible = (
   initialScore: Score,
@@ -35,7 +36,7 @@ export const sumOrFirstIneligible = (
 
 const makeRule =
   (condition: Condition) =>
-  (riskPoint: Score) =>
+  (riskPoint: RiskPoint) =>
   (personalInformation: PersonalInformation) =>
     condition(personalInformation) ? riskPoint : 0;
 
