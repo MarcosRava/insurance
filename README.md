@@ -2,8 +2,7 @@
 
 ## Description
 
-JSON API built using [NestJS](https://nestjs.com/) framework and [TypeScript](https://www.typescriptlang.org/) to calculate user risk profile for insurances
-
+JSON API built using [NestJS](https://nestjs.com/) framework and [TypeScript](https://www.typescriptlang.org/). It calculates users' risk profiles and suggests them insurance plans.
 ## Running the app
 
 You can use `dotenv` file for environment variables creating a `.env` file or coping existent `.env.example` file
@@ -55,7 +54,7 @@ $ npm run test:cov
 
 ## Api Documentation
 
-Application provides [OpenApi](https://www.openapis.org/) documentation in [swagger](https://swagger.io/) client on `/api` endpoint
+The insurance application provides an [OpenApi](https://www.openapis.org/) documentation using [swagger](https://swagger.io/) client. This is available at  `/api` endpoint
 
 _Ps: Schema names are with Dto suffix because are not possible to change yet, I opened an [issue](https://github.com/nestjs/nest/issues/8574) on nestjs with that point_
 
@@ -91,7 +90,7 @@ Module with application configurations, a prefix is used in environment variable
 
 ### module
 
-Modules folder have all about a specific context
+The folder named modules separates each specific context of the application
 
 ### common
 
@@ -111,7 +110,7 @@ Data Transfer Objects are used as presenters and adapters, an example of adapter
 
 Use cases and entities are isolated. They don't have any external dependencies
 
-Services has use cases, they receive DTOs, convert then to entities and call use cases, they are called by controllers
+Services have use cases, they receive DTOs, convert then to entities and call use cases, they are called by controllers
 
 Risk algorithm use cases were developed using an [abstraction](src/module/risk/use-case/risk-score.use-case.ts) with required rules for all cases. The [rules](/src/module/risk/rule/index.rule.ts) were developed using [function composition](<https://en.wikipedia.org/wiki/Function_composition_(computer_science)>) and [lazy evaluation](https://en.wikipedia.org/wiki/Lazy_evaluation) to be easy to extends.
 
